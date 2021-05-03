@@ -1,0 +1,68 @@
+Given an input stream of N integers. The task is to insert these numbers into a new stream and find the median of the stream 
+formed by each insertion of X to the new stream.
+
+Input:
+N = 4
+X[] = 5,15,1,3
+
+Output:
+5
+10
+5
+4
+
+Explanation:Flow in stream : 5, 15, 1, 3 
+            5 goes to stream --> median 5 (5) 
+            15 goes to stream --> median 10 (5,15) 
+            1 goes to stream --> median 5 (5,15,1) 
+            3 goes to stream --> median 4 (5,15,1 3) 
+            
+            
+            
+SOLUTION:
+
+
+    priority_queue<int> Big;
+    priority_queue<int, vector<int>, greater<int>> Small;
+    
+    void insertHeap(int &x)
+    {
+        if(Big.empty()==true){
+            Big.push(x);
+            return;
+        }
+        if(Big.size()>Small.size()){
+            if(Big.top()>x){
+                Small.push(Big.top());
+                Big.pop();
+                Big.push(x);
+            }
+            else
+                Small.push(x);
+        }
+        else{
+            if(Big.top()>x)
+                Big.push(x);
+            else{
+                Small.push(x);
+                Big.push(Small.top());
+                Small.pop();
+            }
+        }
+    }
+    
+    
+    double getMedian()
+    {
+        int sizeB = Big.size(), sizeS = Small.size();
+        if(sizeB!=sizeS){
+            return Big.top();
+        }
+        else{
+            return (double)(Big.top() + Small.top())/2; 
+        }
+    }
+
+
+
+
